@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { ICard } from "src/stores/interface-store";
   import { data } from "../stores";
+  import { paginate, LightPaginationNav } from "svelte-paginate";
 
   export let cards: ICard[];
   export let categories: string[];
@@ -16,7 +17,13 @@
       e?.categories?.toLowerCase().includes(value.toLowerCase())
   );
 
-  $: itens = searched || cards;
+  $: items = searched || cards;
+
+  let currentPage = 1;
+  let pageSize = 10;
+  $: paginatedItems = paginate({ items, pageSize, currentPage });
+
+  console.log(paginatedItems);
 </script>
 
 <div class="partners__content">
@@ -39,7 +46,7 @@
   <div class="content__action">
     <select bind:value class="actions__inputs" name="select">
       <option value="" disabled selected>Categoria</option>
-      {#if categories.length}
+      {#if categories?.length}
         {#each categories as category}
           <option value={category}>{category}</option>
         {/each}
@@ -57,26 +64,32 @@
   </div>
 
   <div class="content__cards">
-    {#if itens.length}
-      {#each itens as item}
+    {#if items?.length}
+      {#each paginatedItems as item}
         <div class="content__card">
-          <img
-            src={baseURL + item.image}
-            alt="logo da empresa"
-            width="64"
-            height="64"
-          />
+          <div class="card__img">
+            <img
+              src={baseURL + item.image}
+              alt="logo da empresa"
+              width="128"
+              height="128"
+            />
+          </div>
 
           <div class="item__pontos">
             <div class="pontos__pts">{item.currency}</div>
             <div class="pontos__value">{item.value}</div>
             <div class="pontos__separador">{item.separator}</div>
             <div class="pontos__value">{item.parityClub}</div>
-            <div class="pontos__pts">Pontos</div>
+            <div class="pontos__pts pontos__pts--small">Pontos</div>
           </div>
 
-          <button> ir para o site</button>
-          <button> saiba mais </button>
+          <button class="card__button card__button--primary">
+            ir para o site</button
+          >
+          <button class="card__button card__button--secondary">
+            saiba mais
+          </button>
         </div>
       {/each}
     {:else}
@@ -88,6 +101,16 @@
       />
       <p>Nada encontrado com o texto {search}</p>
     {/if}
+  </div>
+  <div class="content__paginate">
+    <LightPaginationNav
+      totalItems={items?.length}
+      {pageSize}
+      {currentPage}
+      limit={1}
+      showStepOptions={true}
+      on:setPage={(e) => (currentPage = e.detail.page)}
+    />
   </div>
 </div>
 
@@ -158,26 +181,64 @@
         flex-direction: column;
         align-items: center;
 
+        .card__img {
+          display: flex;
+          align-items: center;
+          height: 128px;
+          width: 128px;
+          aspect-ratio: 1;
+        }
+
         .item__pontos {
           display: flex;
           align-items: center;
           font-size: 1rem;
+          padding: 0.5rem;
+
           .pontos__pts {
-            font-size: 0.5rem;
+            font-size: 0.85rem;
             padding: 0 0.25rem;
+            &--small {
+              font-size: 0.65rem;
+            }
           }
           .pontos__value {
             font-size: 1rem;
           }
           .pontos__separador {
-            padding: 0.5rem;
+            padding: 0 0.25rem;
           }
         }
 
-        button {
+        .card__button {
+          background-color: #2f237d;
+          border: 1px solid #2f237d;
+          border-radius: 1rem;
           width: calc(100% - 1rem);
+          margin-bottom: 0.5rem;
+          height: 2rem;
+          &--primary {
+            background-color: #2f237d;
+            color: #fff;
+          }
+
+          &--secondary {
+            background-color: transparent;
+            color: #2f237d;
+          }
         }
       }
+    }
+
+    .content__paginate {
+      margin: 0.5rem;
+      display: initial;
+    }
+    :global(.option.number),
+    :global(.option.ellipsis),
+    :global(.option.prev),
+    :global(.option.next) {
+      padding: 0.5rem 0.5rem;
     }
   }
 

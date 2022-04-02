@@ -23,7 +23,6 @@
   let pageSize = 10;
   $: paginatedItems = paginate({ items, pageSize, currentPage });
 
-  console.log(paginatedItems);
 </script>
 
 <div class="partners__content">
@@ -84,12 +83,21 @@
             <div class="pontos__pts pontos__pts--small">Pontos</div>
           </div>
 
-          <button class="card__button card__button--primary">
-            ir para o site</button
+          <a
+            sveltekit:prefetch
+            href={item.url}
+            target="_blank"
+            class="card__button card__button--primary"
           >
-          <button class="card__button card__button--secondary">
-            saiba mais
-          </button>
+            ir para o site</a
+          >
+          <a
+              
+            href={`/detalhes/${item.name?.toLowerCase()}`}
+            class="card__button card__button--secondary"
+          >
+            saiba mais</a
+          >
         </div>
       {/each}
     {:else}
@@ -211,12 +219,16 @@
         }
 
         .card__button {
-          background-color: #2f237d;
           border: 1px solid #2f237d;
           border-radius: 1rem;
           width: calc(100% - 1rem);
           margin-bottom: 0.5rem;
           height: 2rem;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
           &--primary {
             background-color: #2f237d;
             color: #fff;

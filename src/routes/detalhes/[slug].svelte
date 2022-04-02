@@ -1,64 +1,39 @@
 <script context="module" lang="ts">
-  export interface IParceiro {
-    id: string;
-    name: string;
-    site: string;
-    link: string;
-    image: string;
-    imageBanner: string;
-    enableRecaptcha: boolean;
-    enableBenefits: boolean;
-    enableModal: boolean;
-    createdDate: string;
-    partnerType: string;
-    categories: string;
-    partnersPolicies: IRegrasParceiro[];
-    imageMosaic?: string;
-    partnerDetailsPage?: string;
-    partnerAppDetailsPage?: string;
-  }
-
-  interface IRegrasParceiro {
-    id: number;
-    partnersConfigId: string;
-    siteId: string;
-    title: string;
-    text: string;
-    displayOrder: number;
-  }
+  import type { IDetails } from "src/stores/interface-store";
 
   export const load = async ({ params, fetch }) => {
-    console.log(params);
     const { slug } = params;
     const res = await fetch(
-      `https://www.livelo.com.br/ccstore/v1/files/thirdparty/config_partners_compre_e_pontue.json`
+      `https://www.livelo.com.br/ccstoreui/v1/pages/layout/ganhe-pontos-compre-pontue-${slug}`
     );
-    const data = await res.json();
+    const data: IDetails = await res.json();
 
-    const { partners } = data;
-    const detalhesParceiro: IParceiro = partners.filter(
-      (e) => e.id === slug && e.enableBenefits
-    )[0];
+    console.log(data);
+
+    const { regions, title } = data;
+    const img = regions?.find((e) => e?.widgets[0]?.targetBannerImg)?.widgets[0]
+      .targetBannerImg.src;
 
     return {
       props: {
-        detalhesParceiro,
+        title,
+        img,
       },
     };
   };
 </script>
 
 <script lang="ts">
-  export let detalhesParceiro: IParceiro;
+  export let title: string;
+  export let img: string;
 
   const baseURL = "https://www.livelo.com.br/";
   // export let user;
 </script>
-<img src={baseURL + detalhesParceiro.image} alt="">
 
-<p>{JSON.stringify(detalhesParceiro.image)}</p>
-<p>{JSON.stringify(detalhesParceiro)}</p>
+<!-- <img src={baseURL + detalhesParceiro.image} alt="">
 
-<!-- <h1>{post.title}</h1>
-<p>{post.body}</p>
-<p>Written by <a href={`/authors/${user.id}`}>{user.name}</a></p> -->
+<p>{JSON.stringify(detalhesParceiro.image)}</p> -->
+
+<h1>{title}</h1>
+<img src={baseURL + img} alt="" />

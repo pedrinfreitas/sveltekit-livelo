@@ -1,7 +1,11 @@
 <script>
   import { onMount } from "svelte";
+  import { navigating } from "$app/stores";
+  import { loading } from "../stores";
 
   let isPageLoaded = false;
+
+  $: $loading = !!$navigating;
 
   onMount(() => {
     isPageLoaded = true;
@@ -9,13 +13,14 @@
 </script>
 
 <div class="page__container">
-  {#if !isPageLoaded}
+  <h1>Projeto em desenvolvimento para fins de estudo.</h1>
+  {#if !isPageLoaded || $loading}
     <div class="loader">
       <svg
         class="tea"
         width="37"
         height="48"
-        viewbox="0 0 37 48"
+        viewBox="0 0 37 48"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >

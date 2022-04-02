@@ -39,7 +39,6 @@
 
     return {
       props: {
-        parceiros,
         cards,
         categories,
       },

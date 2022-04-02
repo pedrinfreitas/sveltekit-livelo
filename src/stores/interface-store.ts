@@ -55,3 +55,16 @@ export interface ICard {
   parityClub: number;
   url: string;
 }
+
+export interface IDetails {
+  regions: IWidgets[];
+  title: string;
+}
+
+interface IWidgets {
+  widgets: {
+    targetBannerImg: {
+      src: string;
+    };
+  };
+}

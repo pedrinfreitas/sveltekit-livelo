@@ -37,5 +37,6 @@ const responseAPI: IRespostaAPI = { categories: [], partners: [] };
 // };
 
 export const data = writable(responseAPI);
+export const loading = writable(false);
 
 // data.subscribe((e) => e);

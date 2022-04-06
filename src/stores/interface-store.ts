@@ -3,6 +3,11 @@ export interface IRespostaAPI {
   partners: IParceiro[];
 }
 
+export interface IParceirosAPI {
+  cards: ICard[];
+  categories: string[];
+}
+
 export interface IParceiro {
   id: string;
   name: string;
@@ -58,6 +63,10 @@ export interface ICard {
 
 export interface IDetails {
   regions: IWidgets[];
+  title: string;
+}
+export interface IDetailsAPI {
+  img: string;
   title: string;
 }
 

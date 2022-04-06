@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { ICard } from "src/stores/interface-store";
-  import { data } from "../stores";
   import { paginate, LightPaginationNav } from "svelte-paginate";
 
   export let cards: ICard[];
@@ -34,7 +33,7 @@
       alt="icone de uma loja"
       aria-hidden="true"
     />
-    <h2>A melhores lojas estão aqui {$data.categories}</h2>
+    <h2>A melhores lojas estão aqui</h2>
   </div>
 
   <p class="content__description">

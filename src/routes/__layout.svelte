@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { navigating } from "$app/stores";
-  import { loading } from "../stores";
+  import { loading } from "../stores/";
 
   let isPageLoaded = false;
 
@@ -13,7 +13,7 @@
 </script>
 
 <div class="page__container">
-  <h1>Projeto em desenvolvimento para fins de estudo.</h1>
+  <p># Projeto em desenvolvimento para fins de estudo.</p>
   {#if !isPageLoaded || $loading}
     <div class="loader">
       <svg
@@ -63,7 +63,8 @@
   <slot />
 </div>
 
-<style>
+<style lang="scss">
+
   @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;500&display=swap");
 
   .loader {
@@ -103,7 +104,13 @@
 
   .page__container {
     max-width: 800px;
-    margin: 50px auto;
+    margin: 1rem auto;
+
+    p {
+      width: 100%;
+      text-align: center;
+      
+    }
   }
 
   svg.tea {

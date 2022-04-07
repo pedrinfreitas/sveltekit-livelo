@@ -3,6 +3,17 @@ import type {
   IRespostaAPI,
   IResumoParceiros,
 } from "src/stores/interface-store";
+import { getColor } from "../../../utils/color-thief";
+
+async function colorThief(img: string, quality: number) {
+  return await getColor(img, quality)
+    .then((color) => {
+      return color;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
 
 export async function get() {
   const resProgram = await fetch(
@@ -19,8 +30,8 @@ export async function get() {
 
   const parceiros: IResumoParceiros[] = await resDetails.json();
 
-  const cards: ICard[] = partnersEnables
-    .map((e) => {
+  const cards = partnersEnables
+    .map(async (e) => {
       const details = parceiros.find((id) => id.partnerCode === e.id);
       return {
         id: e.id,
@@ -32,15 +43,16 @@ export async function get() {
         separator: details.separator,
         parityClub: details.parityClub,
         url: details.url,
+        cores: await colorThief("https://www.livelo.com.br/" + e.image, 15),
       };
     })
-    .sort((a, b) => b.parityClub - a.parityClub);
+    .sort((a: any, b: any) => b.parityClub - a.parityClub);
 
   return {
     status: 200,
     body: {
       categories,
-      cards,
+      cards: await Promise.all(cards),
     },
   };
 }

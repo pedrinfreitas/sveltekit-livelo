@@ -87,6 +87,7 @@
             href={item.url}
             target="_blank"
             class="card__button card__button--primary"
+            style="background-color: rgb({item.cores})"
           >
             ir para o site</a
           >
